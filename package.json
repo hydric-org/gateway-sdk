@@ -1,0 +1,27 @@
+{
+    "name": "hydric-gateway-sdk",
+    "private": true,
+    "description": "Hydric Gateway SDK family",
+    "packageManager": "pnpm@9.0.0",
+    "engines": {
+        "node": ">=18"
+    },
+    "scripts": {
+        "build": "pnpm --filter \"@hydric/*\" build",
+        "test": "pnpm --filter \"@hydric/*\" test",
+        "lint": "pnpm --filter \"@hydric/*\" lint",
+        "typecheck": "pnpm --filter \"@hydric/*\" typecheck",
+        "update-spec": "curl -s https://api.hydric.org/v1/openapi.json -o specs/openapi.json",
+        "generate-types": "pnpm --filter \"@hydric/*\" generate-types",
+        "sync": "pnpm run update-spec && pnpm run generate-types"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^7.0.0",
+        "@typescript-eslint/parser": "^7.0.0",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.5.5",
+        "prettier": "^3.2.5",
+        "typescript": "^5.3.3"
+    }
+}

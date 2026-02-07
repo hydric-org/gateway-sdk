@@ -1,0 +1,34 @@
+{
+    "name": "@hydric/gateway",
+    "version": "0.0.1",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "lint": "eslint src --ext .ts",
+        "typecheck": "tsc --noEmit",
+        "generate-types": "openapi-typescript ../../specs/openapi.json -o src/generated/api-types.ts",
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "openapi-typescript": "^6.7.4",
+        "tsup": "^8.0.2",
+        "vitest": "^1.2.2"
+    }
+}
