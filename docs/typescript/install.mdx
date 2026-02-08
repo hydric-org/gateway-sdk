@@ -1,6 +1,6 @@
 ---
-title: "Installation"
-description: "Get started with the hydric Gateway SDK in your TypeScript project."
+title: 'Installation'
+description: 'Get started with the hydric Gateway SDK in your TypeScript project.'
 ---
 
 The hydric Gateway SDK is distributed via NPM. It's designed to work in both Node.js and modern browser environments.
@@ -32,11 +32,11 @@ To use the SDK, you'll need an API key from the [hydric Dashboard](https://dashb
 Initialize the client and start fetching data:
 
 ```typescript
-import { HydricGateway } from "@hydric/gateway";
+import { HydricGateway } from '@hydric/gateway';
 
 // Initialize the client
 const hydric = new HydricGateway({
-  apiKey: "your_api_key_here",
+  apiKey: 'your_api_key_here',
 });
 
 // Fetch top tokens across all chains
@@ -45,7 +45,7 @@ const { tokens } = await hydric.multichainTokens.list({
 });
 
 console.log(
-  "Top Tokens:",
+  'Top 5 Tokens:',
   tokens.map((t) => t.symbol),
 );
 ```
@@ -55,25 +55,13 @@ console.log(
 Now that you have the client running, explore the core concepts to master the SDK:
 
 <CardGroup cols={3}>
-  <Card
-    title="Authentication"
-    icon="key"
-    href="/sdk-reference/typescript/authentication"
-  >
+  <Card title="Authentication" icon="key" href="/sdk-reference/typescript/authentication">
     Best practices for API key security.
   </Card>
-  <Card
-    title="Error Handling"
-    icon="triangle-exclamation"
-    href="/sdk-reference/typescript/error-handling"
-  >
+  <Card title="Error Handling" icon="triangle-exclamation" href="/sdk-reference/typescript/error-handling">
     How to catch and manage API errors.
   </Card>
-  <Card
-    title="Resource Guides"
-    icon="book"
-    href="/sdk-reference/typescript/multi-chain-tokens"
-  >
+  <Card title="Resource Guides" icon="book" href="/sdk-reference/typescript/multi-chain-tokens">
     Deep dives into every SDK resource.
   </Card>
 </CardGroup>
