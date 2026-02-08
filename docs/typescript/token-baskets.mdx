@@ -1,0 +1,67 @@
+---
+title: "Token Baskets"
+description: "Discover curated groups of related tokens."
+---
+
+Token Baskets are curated lists maintained by the hydric team to help developers quickly access thematically related assets. Common baskets include "USD Stablecoins", "BTC Pegged Tokens", and "ETH Pegged Tokens".
+
+Access this resource via `hydric.tokenBaskets`.
+
+## Listing All Baskets
+
+Retrieve a list of all available baskets, optionally filtered by the chains they support.
+
+```typescript
+// Get all available baskets
+const { baskets } = await hydric.tokenBaskets.list();
+
+// Get baskets available on Ethereum and Base
+const { baskets } = await hydric.tokenBaskets.list({
+  chainIds: [1, 8453],
+});
+```
+
+## Getting a Basket by ID
+
+Baskets can be retrieved either as a multi-chain aggregate or as a specific instance for one network.
+
+### Multi-Chain View
+
+Returns the basket metadata along with the list of chains it is available on.
+
+```typescript
+const { basket } = await hydric.tokenBaskets.getMultiChainById({
+  basketId: "usd-stablecoins",
+});
+
+console.log(
+  `Basket ${basket.name} is available on ${basket.chains.length} chains.`,
+);
+```
+
+### Single-Chain View
+
+Returns the basket specifically as it exists on one network, including the specific token addresses for that network.
+
+```typescript
+const { basket } = await hydric.tokenBaskets.getSingleChainById({
+  chainId: 8453,
+  basketId: "usd-stablecoins",
+});
+
+// Access the tokens directly
+basket.tokens.forEach((token) => {
+  console.log(`${token.symbol}: ${token.address}`);
+});
+```
+
+## Available Baskets
+
+import AvailableTokenBaskets from "/snippets/available-token-baskets.mdx";
+
+<AvailableTokenBaskets />
+
+<Tip>
+  Using Baskets is the fastest way to build targeted swap UIs or liquidity
+  monitors for specific asset classes.
+</Tip>

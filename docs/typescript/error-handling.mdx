@@ -1,0 +1,56 @@
+---
+title: "Error Handling"
+description: "How to handle failures gracefully in the hydric SDK."
+---
+
+The hydric Gateway SDK implements a robust error handling system using custom TypeScript classes. This allows you to differentiate between different failure types (like rate limits vs. validation errors) using standard `instanceof` checks.
+
+## Base Error Class
+
+All custom errors in the SDK extend from `HydricError`. This base class provides:
+
+- `name`: The specific error name (e.g., `HydricRateLimitError`).
+- `message`: A human-readable explanation of what went wrong.
+
+## Common Error Types
+
+| Error Class                | Meaning                                                            |
+| :------------------------- | :----------------------------------------------------------------- |
+| `HydricInvalidParamsError` | Your request has invalid parameters.                               |
+| `HydricUnauthorizedError`  | Your API key is missing or invalid.                                |
+| `HydricNotFoundError`      | The requested resource (pool, token, basket, etc.) does not exist. |
+| `HydricRateLimitError`     | You have exceeded your plan's request limit.                       |
+| `HydricError`              | An unexpected error occurred on the hydric Gateway.                |
+
+## Handling Errors
+
+We recommend using a `try/catch` block with `instanceof` checks for precise error management.
+
+```typescript
+import {
+  HydricGateway,
+  HydricRateLimitError,
+  HydricNotFoundError,
+} from "@hydric/gateway";
+
+const hydric = new HydricGateway({ apiKey: "..." });
+
+try {
+  const data = await hydric.tokenBaskets.getSingleChainById({
+    chainId: 1,
+    basketId: "non-existent-basket",
+  });
+} catch (error) {
+  if (error instanceof HydricRateLimitError) {
+    console.error("Slow down! Use exponential backoff.");
+  } else if (error instanceof HydricNotFoundError) {
+    console.error("The specific basket or chain combination was not found.");
+  } else {
+    console.error("An unexpected error occurred:", error.message);
+  }
+}
+```
+
+## Fail Fast & Loud
+
+The SDK is designed to throw as soon as it detects an issue. For example, if a required parameter is missing, it will throw a `HydricInvalidParamsError` before even making the network request, saving you latency and API quota.

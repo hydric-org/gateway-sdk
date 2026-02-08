@@ -1,0 +1,44 @@
+name: Sync Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+
+jobs:
+  sync-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gateway-sdk
+        uses: actions/checkout@v4
+        with:
+          path: gateway-sdk
+
+      - name: Checkout hydric-org/docs
+        uses: actions/checkout@v4
+        with:
+          repository: hydric-org/docs
+          path: docs-repo
+          token: ${{ secrets.SYNC_DOCS_PAT }}
+
+      - name: Sync TypeScript Docs
+        run: |
+          mkdir -p docs-repo/sdk-reference/typescript
+          rsync -av --delete gateway-sdk/docs/typescript/ docs-repo/sdk-reference/typescript/
+
+      - name: Commit and Push Changes
+        working-directory: docs-repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sdk-reference/typescript
+
+          # Check if there are changes before committing
+          if git diff --staged --quiet; then
+            echo "No changes to sync."
+          else
+            git commit -m "docs: sync typescript sdk reference from gateway-sdk"
+            git push origin main
+          fi

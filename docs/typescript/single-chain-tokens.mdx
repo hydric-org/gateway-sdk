@@ -1,0 +1,54 @@
+---
+title: "Single-Chain Tokens"
+description: "High-performance token data for specific blockchain networks."
+---
+
+The `singleChainTokens` resource is the high-performance path for token data. By targeting a specific network, this resource offers faster response times and lower latency than its multi-chain counterpart.
+
+Access this resource via `hydric.singleChainTokens`.
+
+## Listing Tokens
+
+To list tokens on a specific chain, provide the numeric `chainId` as the first argument.
+
+```typescript
+// List top tokens on Base (Chain ID: 8453)
+const { tokens, nextCursor } = await hydric.singleChainTokens.list(8453, {
+  config: {
+    limit: 10,
+    orderBy: { field: "tvl", direction: "desc" },
+  },
+  filters: {
+    minimumTotalValuePooledUsd: 100000, // Filter for deep liquidity
+  },
+});
+```
+
+## Searching Tokens
+
+Search for a token by ticker or name on a specific network.
+
+```typescript
+// Search for WETH on Ethereum (Chain ID: 1)
+const { tokens } = await hydric.singleChainTokens.search(1, {
+  search: "WETH",
+});
+```
+
+## Why use Single-Chain?
+
+While `multichainTokens` is powerful for discovery, `singleChainTokens` is preferred for:
+
+1. **Transaction Simulation:** When you need the exact address on a specific chain to prepare a swap.
+2. **Latency-Sensitive Apps:** Dashboard widgets that update frequently.
+3. **Chain-Specific Views:** When the user has already selected a target network in your UI.
+
+## Data Model
+
+The `SingleChainTokenMetadata` object includes:
+
+- `address`: The token contract address on this specific chain.
+- `chainId`: The numeric ID of the network.
+- `symbol`: Token ticker.
+- `name`: Full name.
+- `decimals`: Token precision.

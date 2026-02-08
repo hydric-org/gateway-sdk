@@ -1,0 +1,57 @@
+---
+title: 'Authentication'
+description: 'Securing your requests with the hydric API key.'
+---
+
+Every request made through the hydric Gateway SDK must be authenticated. This is handled via a **Secret API Key** that you provide during the initialization of the `HydricGateway` client.
+
+## Obtaining your API Key
+
+1. Log in to the [hydric Dashboard](https://dashboard.hydric.org).
+2. Navigate to the **API Keys** section.
+3. Generate a new key or copy an existing one.
+
+<Warning>
+  Your API key is secret. Never commit it to version control or expose it in client-side code without proper environment variable injection and proxying if necessary for your use
+  case.
+</Warning>
+
+## Using the API Key
+
+The key is passed to the `HydricGateway` constructor. Once set, the SDK automatically includes it in the `Authorization` header of every request.
+
+```typescript
+import { HydricGateway } from '@hydric/gateway';
+
+const hydric = new HydricGateway({
+  apiKey: process.env.HYDRIC_API_KEY, // Recommended approach
+});
+```
+
+## Security Best Practices
+
+### Use Environment Variables
+
+Never hardcode your API key. Use `.env` files or your platform's secret management (e.g., Vercel, AWS Secrets Manager).
+
+### Client-Side Security
+
+If you are building a frontend application:
+
+- **Proxy Requests:** Consider routing requests through your own backend to keep the API key hidden from the browser.
+- **Allowed Domains:** In the hydric Dashboard, you can (soon) restrict keys to specific domains or IP addresses to prevent unauthorized use.
+
+## Validation Errors
+
+If you initialize the client without a key or with an invalid key, the SDK will throw an error:
+
+- **Missing Key:** Throws `HydricInvalidParamsError` immediately during instantiation.
+- **Invalid Key:** The server will return a 401 Unauthorized status, throwing a `HydricUnauthorizedError`.
+
+```typescript
+try {
+  const hydric = new HydricGateway({ apiKey: '' });
+} catch (error) {
+  // Catching "API key is required"
+}
+```

@@ -1,0 +1,58 @@
+---
+title: "Multi-Chain Tokens"
+description: "Aggregate and list tokens across multiple blockchains."
+---
+
+The `multichainTokens` resource is designed for applications that need a holistic view of assets across the entire DeFi ecosystem. It provides unified models that aggregate metadata, liquidity, etc. from multiple chains into a single entry.
+
+Access this resource via `hydric.multichainTokens`.
+
+## Listing Tokens
+
+The `list` method returns a paginated list of tokens containing metadata for multiple blockchains. This is ideal for building "Top Tokens" or "Exploration" views.
+
+```typescript
+const { tokens, nextCursor } = await hydric.multichainTokens.list({
+  config: {
+    limit: 10,
+    orderBy: { field: "tvl", direction: "desc" },
+  },
+  filters: {
+    chainIds: [1, 8453], // Optional: Filter to specific chains (e.g., Ethereum and Base)
+  },
+});
+```
+
+<Note>
+  **Performance Note:** Aggegrating data across chains is computationally
+  expensive. If you only need data for a single specific chain, use the
+  [Single-Chain Tokens](/sdk/typescript/single-chain-tokens) resource for
+  significantly faster responses.
+</Note>
+
+## Searching Tokens
+
+Search for assets by ticker symbol or name across all supported blockchains.
+
+```typescript
+const { tokens } = await hydric.multichainTokens.search({
+  search: "USDC",
+  config: { limit: 5 },
+});
+
+for (const token of tokens) {
+  console.log(
+    `${token.symbol}: Available on chains ${token.chainIds.join(", ")}`,
+  );
+}
+```
+
+## Data Model
+
+The `MultiChainTokenMetadata` object includes:
+
+- `address`: The canonical address (if applicable).
+- `symbol`: The token ticker (e.g., "USDC").
+- `name`: Full token name.
+- `chainIds`: An array of numeric IDs for every chain where this token has liquidity.
+- `logoUrl`: A verified icon for the asset.
