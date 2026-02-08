@@ -7,6 +7,23 @@
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
+    "keywords": [
+        "hydric",
+        "defi",
+        "normalized-data",
+        "cross-chain",
+        "multi-chain",
+        "multichain",
+        "liquidity-pool",
+        "token",
+        "crypto",
+        "ethereum",
+        "sdk",
+        "api-client",
+        "viem",
+        "ethers",
+        "token-basket"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/hydric-org/gateway-sdk.git",
