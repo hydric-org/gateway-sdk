@@ -1,4 +1,4 @@
-name: Gatekeeper CI
+name: Pull Request CI
 
 on:
   pull_request:
@@ -9,6 +9,7 @@ on:
       - ".changeset/**"
       - "package.json"
       - "pnpm-workspace.yaml"
+      - ".github/workflows/pull-request.yml"
 
 jobs:
   verify:
