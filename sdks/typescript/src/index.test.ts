@@ -31,7 +31,7 @@ describe('HydricGateway', () => {
         new HydricGateway({ apiKey: '' });
       } catch (error) {
         expect(error).toBeInstanceOf(HydricInvalidParamsError);
-        expect((error as any).name).toBe('HydricInvalidParamsError');
+        expect((error as HydricInvalidParamsError).name).toBe('HydricInvalidParamsError');
       }
     });
 

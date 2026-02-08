@@ -23,9 +23,7 @@ export async function fetchHydricApi<T>(url: string, options: RequestInit): Prom
     }
 
     if (response.status === 429) {
-      error = new HydricRateLimitError(
-        errorResponse.error.metadata as components['schemas']['RateLimitMetadata'],
-      );
+      error = new HydricRateLimitError(errorResponse.error.metadata as components['schemas']['RateLimitMetadata']);
     }
 
     if (response.status === 400) {
