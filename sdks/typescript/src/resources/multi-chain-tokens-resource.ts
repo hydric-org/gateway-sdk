@@ -11,6 +11,10 @@ export type SearchMultichainTokensResult = components['schemas']['SearchMulticha
 
 /**
  * Resource class for interacting with multi-chain token endpoints.
+ *
+ * @remarks
+ * Use this resource for aggregated token data across multiple blockchains.
+ * For single-chain operations, use {@link SingleChainTokensResource}.
  */
 export class MultiChainTokensResource {
   constructor(

@@ -1,6 +1,7 @@
 import { HydricInvalidParamsError } from './errors/hydric-invalid-params.error.js';
 import type { components, operations, paths } from './generated/api-types.js';
 import { MultiChainTokensResource } from './resources/multi-chain-tokens-resource.js';
+import { SingleChainTokensResource } from './resources/single-chain-tokens-resource.js';
 
 const BASE_API_URL = process.env.BASE_API_URL!;
 const DASHBOARD_URL = process.env.DASHBOARD_URL!;
@@ -43,10 +44,27 @@ export class HydricGateway {
 
   /**
    * Access the MultiChainTokens resource.
-   * Use this to fetch token lists, search tokens, etc.
+   * Use this to fetch multi-chain token lists, search tokens, and aggregate data.
+   *
+   * @remarks
+   * ⚠️ **Performance Note:** Only use this resource if you specifically need data across multiple chains.
+   * For single-chain operations, use {@link SingleChainTokensResource} instead as it is significantly more efficient.
+   *
    * @see {@link MultiChainTokensResource}
    */
   public readonly multichainTokens: MultiChainTokensResource;
+
+  /**
+   * Access the SingleChainTokens resource.
+   * Use this for efficient single-chain token operations like listing, searching, and getting token details.
+   *
+   * @remarks
+   * This is the preferred resource for single-chain operations as it is more efficient
+   * than the multi-chain equivalent.
+   *
+   * @see {@link SingleChainTokensResource}
+   */
+  public readonly singleChainTokens: SingleChainTokensResource;
 
   /**
    * Creates a new instance of the hydric Gateway SDK client.
@@ -72,6 +90,10 @@ export class HydricGateway {
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl || this.getBaseUrl();
     this.multichainTokens = new MultiChainTokensResource(this.baseUrl, this.getHeaders.bind(this));
+    this.singleChainTokens = new SingleChainTokensResource(
+      this.baseUrl,
+      this.getHeaders.bind(this),
+    );
   }
 
   /**
@@ -106,5 +128,6 @@ export * from './errors/hydric-invalid-params.error.js';
 export * from './errors/hydric-unauthorized.error.js';
 
 export * from './resources/multi-chain-tokens-resource.js';
+export * from './resources/single-chain-tokens-resource.js';
 export type { components, operations, paths };
 
