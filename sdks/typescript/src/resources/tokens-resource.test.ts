@@ -173,4 +173,137 @@ describe('TokensResource', () => {
       }
     });
   });
+
+  describe('search', () => {
+    it('should search tokens by keyword successfully', async () => {
+      const mockData = {
+        tokens: [
+          {
+            addresses: [
+              { chainId: 1, address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' },
+              { chainId: 8453, address: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913' },
+            ],
+            symbol: 'USDC',
+            name: 'USD Coin',
+            logoUrl: 'https://logos.hydric.org/tokens/1/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+            chainIds: [1, 8453],
+          },
+        ],
+        nextCursor: null,
+        filters: {},
+      };
+      const mockEnvelope = {
+        statusCode: 200,
+        timestamp: '2026-01-01T00:00:00Z',
+        path: '/v1/tokens/search',
+        traceId: 'req_456',
+        data: mockData,
+      };
+
+      vi.mocked(fetch).mockResolvedValue({
+        ok: true,
+        json: async () => mockEnvelope,
+      } as Response);
+
+      const result = await tokens.search({ search: 'USDC' });
+
+      expect(result).toEqual(mockData);
+      expect(getHeaders).toHaveBeenCalled();
+      expect(fetch).toHaveBeenCalledWith(
+        `${baseUrl}/v1/tokens/search`,
+        expect.objectContaining({
+          method: 'POST',
+          headers: mockHeaders,
+          body: JSON.stringify({ search: 'USDC' }),
+        }),
+      );
+    });
+
+    it('should pass config and filters to the API', async () => {
+      vi.mocked(fetch).mockResolvedValue({
+        ok: true,
+        json: async () => ({ data: { tokens: [], filters: {} } }),
+      } as Response);
+
+      await tokens.search({
+        search: 'ETH',
+        config: { limit: 5 },
+        filters: { chainIds: [1, 8453] },
+      });
+
+      expect(fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          body: JSON.stringify({
+            search: 'ETH',
+            config: { limit: 5 },
+            filters: { chainIds: [1, 8453] },
+          }),
+        }),
+      );
+    });
+
+    it('should throw HydricInvalidParamsError on 400 validation error', async () => {
+      const mockError = {
+        statusCode: 400,
+        timestamp: '2026-01-01T00:00:00Z',
+        path: '/v1/tokens/search',
+        traceId: 'req_789',
+        error: {
+          code: 'VALIDATION_ERROR',
+          title: 'Invalid Parameters',
+          message: 'search must not be empty',
+          details: "Check the 'meta' field for specific field-level violations.",
+          metadata: {
+            property: 'search',
+            value: '',
+            constraints: { isNotEmpty: ['search must not be empty'] },
+          },
+        },
+      };
+
+      vi.mocked(fetch).mockResolvedValue({
+        ok: false,
+        status: 400,
+        json: async () => mockError,
+      } as Response);
+
+      try {
+        await tokens.search({ search: '' });
+        expect.fail('Should have thrown HydricInvalidParamsError');
+      } catch (error) {
+        expect(error).toBeInstanceOf(HydricInvalidParamsError);
+        expect((error as HydricInvalidParamsError).name).toBe('HydricInvalidParamsError');
+      }
+    });
+
+    it('should throw HydricRateLimitError on 429', async () => {
+      const mockError = {
+        statusCode: 429,
+        timestamp: '2026-01-01T00:00:00Z',
+        path: '/v1/tokens/search',
+        traceId: 'req_xyz',
+        error: {
+          code: 'RATE_LIMIT_EXCEEDED',
+          title: 'Too Many Requests',
+          message: 'Rate limit exceeded',
+          metadata: { retryAfterSeconds: 30 },
+        },
+      };
+
+      vi.mocked(fetch).mockResolvedValue({
+        ok: false,
+        status: 429,
+        json: async () => mockError,
+      } as Response);
+
+      try {
+        await tokens.search({ search: 'BTC' });
+        expect.fail('Should have thrown HydricRateLimitError');
+      } catch (error) {
+        expect(error).toBeInstanceOf(HydricRateLimitError);
+        expect((error as HydricRateLimitError).retryAfter).toBe(30);
+      }
+    });
+  });
 });
