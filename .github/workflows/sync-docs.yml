@@ -28,6 +28,10 @@ jobs:
           mkdir -p docs-repo/sdk-reference/typescript
           rsync -av --delete gateway-sdk/docs/typescript/ docs-repo/sdk-reference/typescript/
 
+      - name: Update Sidebar (docs.json)
+        run: |
+          node gateway-sdk/scripts/update-docs-config.js docs-repo/docs.json gateway-sdk/docs/typescript
+
       - name: Commit and Push Changes
         working-directory: docs-repo
         run: |
