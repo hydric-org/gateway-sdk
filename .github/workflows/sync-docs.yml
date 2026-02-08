@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - "docs/**"
+      - "scripts/update-docs-config.js"
+  workflow_dispatch:
 
 jobs:
   sync-docs:
