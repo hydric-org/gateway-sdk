@@ -2,6 +2,7 @@ import { HydricInvalidParamsError } from './errors/hydric-invalid-params.error.j
 import type { components, operations, paths } from './generated/api-types.js';
 import { MultiChainTokensResource } from './resources/multi-chain-tokens-resource.js';
 import { SingleChainTokensResource } from './resources/single-chain-tokens-resource.js';
+import { TokenBasketsResource } from './resources/token-baskets-resource.js';
 
 const BASE_API_URL = process.env.BASE_API_URL!;
 const DASHBOARD_URL = process.env.DASHBOARD_URL!;
@@ -67,6 +68,14 @@ export class HydricGateway {
   public readonly singleChainTokens: SingleChainTokensResource;
 
   /**
+   * Access the TokenBaskets resource.
+   * Use this to retrieve curated groups of related tokens (e.g., stablecoins, BTC pegged tokens, etc.).
+   *
+   * @see {@link TokenBasketsResource}
+   */
+  public readonly tokenBaskets: TokenBasketsResource;
+
+  /**
    * Creates a new instance of the hydric Gateway SDK client.
    * This initialization is synchronous and does not perform any network requests.
    * Validation of the API key occurs locally during instantiation and on the server
@@ -94,6 +103,7 @@ export class HydricGateway {
       this.baseUrl,
       this.getHeaders.bind(this),
     );
+    this.tokenBaskets = new TokenBasketsResource(this.baseUrl, this.getHeaders.bind(this));
   }
 
   /**
@@ -129,5 +139,6 @@ export * from './errors/hydric-unauthorized.error.js';
 
 export * from './resources/multi-chain-tokens-resource.js';
 export * from './resources/single-chain-tokens-resource.js';
+export * from './resources/token-baskets-resource.js';
 export type { components, operations, paths };
 

@@ -89,7 +89,7 @@ describe('SingleChainTokensResource', () => {
       } as Response);
 
       try {
-        await tokens.list(999999);
+        await tokens.list(999999 as any);
         expect.fail('Should have thrown HydricInvalidParamsError');
       } catch (error) {
         expect(error).toBeInstanceOf(HydricInvalidParamsError);

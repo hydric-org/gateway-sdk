@@ -39,6 +39,8 @@ describe('HydricGateway', () => {
       const hydric = new HydricGateway({ apiKey });
       expect(hydric.multichainTokens).toBeDefined();
       expect(typeof hydric.multichainTokens.list).toBe('function');
+      expect(hydric.tokenBaskets).toBeDefined();
+      expect(typeof hydric.tokenBaskets.list).toBe('function');
     });
 
     it('should include the dashboard URL in the validation error message', () => {
