@@ -85,6 +85,30 @@ pnpm lint:typescript
 
 ---
 
+## 📖 Documentation System
+
+The **hydric Gateway SDK** uses a distributed documentation model where the implementation repository remains the source of truth for its respective guides.
+
+### 🏠 Source of Truth
+
+All documentation files for the SDK family are located in the root `/docs` directory:
+
+- **TypeScript:** `/docs/typescript/*.mdx`
+
+### 🚀 Automatic Synchronization
+
+We utilize a GitHub Action ([sync-docs.yml](.github/workflows/sync-docs.yml)) to keep our central documentation repository in sync.
+
+Whenever a change is pushed to the `main` branch that modifies the `/docs` folder, the workflow:
+
+1. Clones the central `hydric-org/docs` repository.
+2. Mirrors the local documentation structure to the target path (e.g., `sdk-reference/typescript/`).
+3. Commits and pushes the updates automatically
+
+This ensures that the latest features and technical details are live on [docs.hydric.org](https://docs.hydric.org) as soon as the code is merged.
+
+---
+
 ## 🔄 Changeset Workflow
 
 We use **Changesets** to handle versioning and changelogs. **Every** PR that modifies code in `sdks/` must include a changeset.
