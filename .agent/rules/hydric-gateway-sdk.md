@@ -29,3 +29,11 @@ The SDK must stay in sync with the Gateway API. Always reference:
 
 - Spec: https://api.hydric.org/v1/openapi.json
 - Docs: https://hydric.mintlify.app/api-reference
+
+## 5. Documentation
+
+This SDK should be heavily documented. Every exported class, method, and property must use JSDoc/TSDoc:
+
+- **@example**: Every public method must include at least one "Copy-Pasteable" code example.
+- **@throws**: Clearly document which custom errors (e.g., `HydricError`) can be thrown.
+- **@param & @returns**: Use descriptive text for every parameter, even if the type is obvious.

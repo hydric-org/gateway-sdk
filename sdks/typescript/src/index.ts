@@ -1,4 +1,110 @@
-// Main entry point for @hydric/gateway
-// Implementation will follow.
-export { };
+import { HydricInvalidParamsError } from './errors/hydric-invalid-params.error.js';
+import type { components, operations, paths } from './generated/api-types.js';
+import { TokensResource } from './resources/tokens-resource.js';
+
+const BASE_API_URL = process.env.BASE_API_URL!;
+const DASHBOARD_URL = process.env.DASHBOARD_URL!;
+
+/**
+ * Configuration options for the hydric Gateway SDK initialization.
+ */
+export interface hydricGatewayApiOptions {
+  /**
+   * The secret API key required to authenticate with the hydric Gateway.
+   * You can retrieve this from the hydric Dashboard.
+   * @see https://dashboard.hydric.org
+   */
+  apiKey: string;
+  /**
+   * The base URL for the hydric Gateway API.
+   * Defaults to the production API URL.
+   */
+  baseUrl?: string;
+}
+
+/**
+ * The main entry point for the hydric Gateway SDK.
+ * Handles authentication and provides access to hydric data resources.
+ *
+ * @example
+ * ```typescript
+ * import { HydricGateway } from '@hydric/gateway';
+ *
+ * const hydric = new HydricGateway({
+ *   apiKey: 'your_api_key_here'
+ * });
+ * ```
+ */
+export class HydricGateway {
+  /** @internal */
+  private readonly apiKey: string;
+  /** @internal */
+  private readonly baseUrl: string;
+
+  /**
+   * Access the Tokens resource.
+   * Use this to fetch token lists, token information, etc.
+   * @see {@link TokensResource}
+   */
+  public readonly tokens: TokensResource;
+
+  /**
+   * Creates a new instance of the hydric Gateway SDK client.
+   * This initialization is synchronous and does not perform any network requests.
+   * Validation of the API key occurs locally during instantiation and on the server
+   * during subsequent API calls.
+   *
+   * @param options - Configuration options for the client.
+   * @throws {HydricInvalidParamsError} If the API key is missing or invalidly formatted.
+   *
+   * @example
+   * ```typescript
+   * const hydric = new HydricGateway({ apiKey: '...' });
+   * ```
+   */
+  constructor(options: hydricGatewayApiOptions) {
+    if (!options.apiKey) {
+      throw new HydricInvalidParamsError(
+        `HydricGateway: API key is required. Get one at ${DASHBOARD_URL}`,
+      );
+    }
+
+    this.apiKey = options.apiKey;
+    this.baseUrl = options.baseUrl || this.getBaseUrl();
+    this.tokens = new TokensResource(this.baseUrl, this.getHeaders.bind(this));
+  }
+
+  /**
+   * Returns the common headers required for hydric Gateway API requests.
+   *
+   * @returns An object containing the Authorization and Content-Type headers.
+   * @protected
+   */
+  protected getHeaders(): HeadersInit {
+    return {
+      Authorization: `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json',
+    };
+  }
+
+  /**
+   * Returns the base URL for the hydric Gateway API.
+   *
+   * @returns The hardcoded base URL of the API.
+   * @protected
+   */
+  protected getBaseUrl(): string {
+    return BASE_API_URL;
+  }
+}
+
+export * from './errors/hydric-error.js';
+export * from './errors/hydric-not-found.error.js';
+export * from './errors/hydric-rate-limit.error.js';
+
+export * from './errors/hydric-invalid-params.error.js';
+export * from './errors/hydric-unauthorized.error.js';
+
+export * from './resources/tokens-resource.js';
+export type { components, operations, paths };
 

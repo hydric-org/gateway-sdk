@@ -3,4 +3,6 @@ dist
 .turbo
 *.log
 .env
-src/generated/api-types.ts
+generated
+coverage
+specs
