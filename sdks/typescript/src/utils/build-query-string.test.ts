@@ -28,9 +28,7 @@ describe('buildQueryString', () => {
       basketIds: ['usd-stablecoins', 'eth-pegged-tokens'],
       limit: 10,
     });
-    expect(result).toBe(
-      '?chainIds=1&chainIds=8453&basketIds=usd-stablecoins&basketIds=eth-pegged-tokens&limit=10',
-    );
+    expect(result).toBe('?chainIds=1&chainIds=8453&basketIds=usd-stablecoins&basketIds=eth-pegged-tokens&limit=10');
   });
 
   it('should skip undefined values', () => {

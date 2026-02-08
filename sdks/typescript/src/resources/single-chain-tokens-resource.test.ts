@@ -89,7 +89,7 @@ describe('SingleChainTokensResource', () => {
       } as Response);
 
       try {
-        await tokens.list(999999 as any);
+        await tokens.list(999999 as unknown as 1);
         expect.fail('Should have thrown HydricInvalidParamsError');
       } catch (error) {
         expect(error).toBeInstanceOf(HydricInvalidParamsError);
@@ -137,8 +137,7 @@ describe('SingleChainTokensResource', () => {
             decimals: 6,
             name: 'USD Coin',
             symbol: 'USDC',
-            logoUrl:
-              'https://logos.hydric.org/tokens/8453/0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+            logoUrl: 'https://logos.hydric.org/tokens/8453/0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
           },
         ],
         nextCursor: null,

@@ -1,32 +1,34 @@
 {
-    "name": "hydric-gateway-sdk",
-    "private": true,
-    "description": "Hydric Gateway SDK family",
-    "packageManager": "pnpm@9.0.0",
-    "engines": {
-        "node": ">=18"
-    },
-    "scripts": {
-        "build": "pnpm --filter \"@hydric/*\" build",
-        "test": "pnpm --filter \"@hydric/*\" test",
-        "lint": "pnpm --filter \"@hydric/*\" lint",
-        "typecheck": "pnpm --filter \"@hydric/*\" typecheck",
-        "update-spec": "mkdir -p specs && curl -s https://api.hydric.org/v1/openapi.json -o specs/openapi.json",
-        "generate-types": "pnpm --filter \"@hydric/*\" generate-types",
-        "sync": "pnpm run update-spec && pnpm run generate-types",
-        "changeset": "changeset",
-        "version-packages": "changeset version",
-        "release": "changeset publish"
-    },
-    "devDependencies": {
-        "@changesets/cli": "^2.29.8",
-        "@types/node": "^25.2.1",
-        "@typescript-eslint/eslint-plugin": "^7.0.0",
-        "@typescript-eslint/parser": "^7.0.0",
-        "eslint": "^8.56.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-prettier": "^5.5.5",
-        "prettier": "^3.2.5",
-        "typescript": "^5.3.3"
-    }
+  "name": "hydric-gateway-sdk",
+  "private": true,
+  "description": "Hydric Gateway SDK family",
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "pnpm --filter \"@hydric/*\" build",
+    "test": "pnpm --filter \"@hydric/*\" test",
+    "lint": "pnpm --filter \"@hydric/*\" lint",
+    "typecheck": "pnpm --filter \"@hydric/*\" typecheck",
+    "update-spec": "mkdir -p specs && curl -s https://api.hydric.org/v1/openapi.json -o specs/openapi.json",
+    "generate-types": "pnpm --filter \"@hydric/*\" generate-types",
+    "sync": "pnpm run update-spec && pnpm run generate-types",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "@types/node": "^25.2.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  }
 }

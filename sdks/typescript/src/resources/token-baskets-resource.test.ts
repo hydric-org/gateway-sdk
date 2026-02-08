@@ -69,10 +69,7 @@ describe('TokenBasketsResource', () => {
 
       await baskets.list({ chainIds: [1, 8453] });
 
-      expect(fetch).toHaveBeenCalledWith(
-        `${baseUrl}/v1/tokens/baskets?chainIds=1&chainIds=8453`,
-        expect.any(Object),
-      );
+      expect(fetch).toHaveBeenCalledWith(`${baseUrl}/v1/tokens/baskets?chainIds=1&chainIds=8453`, expect.any(Object));
     });
 
     it('should throw HydricRateLimitError on 429', async () => {
@@ -151,10 +148,7 @@ describe('TokenBasketsResource', () => {
 
       await baskets.getMultiChainById({ basketId: 'eth-pegged-tokens', chainIds: [1] });
 
-      expect(fetch).toHaveBeenCalledWith(
-        `${baseUrl}/v1/tokens/baskets/eth-pegged-tokens?chainIds=1`,
-        expect.any(Object),
-      );
+      expect(fetch).toHaveBeenCalledWith(`${baseUrl}/v1/tokens/baskets/eth-pegged-tokens?chainIds=1`, expect.any(Object));
     });
 
     it('should throw HydricInvalidParamsError on invalid basket ID', async () => {
@@ -182,7 +176,7 @@ describe('TokenBasketsResource', () => {
       } as Response);
 
       try {
-        await baskets.getMultiChainById({ basketId: 'invalid-id' as any });
+        await baskets.getMultiChainById({ basketId: 'invalid-id' as unknown as 'usd-stablecoins' });
         expect.fail('Should have thrown HydricInvalidParamsError');
       } catch (error) {
         expect(error).toBeInstanceOf(HydricInvalidParamsError);
@@ -200,8 +194,7 @@ describe('TokenBasketsResource', () => {
           code: 'TOKEN_BASKET_NOT_FOUND',
           title: 'Not Found',
           message: "Couldn't find the token basket 'monad-pegged-tokens' on any supported network",
-          details:
-            'The requested token basket does not exist or has no assets on the specified network.',
+          details: 'The requested token basket does not exist or has no assets on the specified network.',
           metadata: { basketId: 'monad-pegged-tokens' },
         },
       };
@@ -267,8 +260,7 @@ describe('TokenBasketsResource', () => {
               decimals: 6,
               name: 'USD Coin',
               symbol: 'USDC',
-              logoUrl:
-                'https://logos.hydric.org/tokens/8453/0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+              logoUrl: 'https://logos.hydric.org/tokens/8453/0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
             },
           ],
         },
@@ -327,7 +319,7 @@ describe('TokenBasketsResource', () => {
       } as Response);
 
       try {
-        await baskets.getSingleChainById({ chainId: 999999 as any, basketId: 'usd-stablecoins' });
+        await baskets.getSingleChainById({ chainId: 999999 as unknown as 1, basketId: 'usd-stablecoins' });
         expect.fail('Should have thrown HydricInvalidParamsError');
       } catch (error) {
         expect(error).toBeInstanceOf(HydricInvalidParamsError);
@@ -344,8 +336,7 @@ describe('TokenBasketsResource', () => {
           code: 'TOKEN_BASKET_NOT_FOUND',
           title: 'Not Found',
           message: "Couldn't find the token basket 'monad-pegged-tokens' on chain id 1",
-          details:
-            'The requested token basket does not exist or has no assets on the specified network.',
+          details: 'The requested token basket does not exist or has no assets on the specified network.',
           metadata: { basketId: 'monad-pegged-tokens', chainId: 1 },
         },
       };

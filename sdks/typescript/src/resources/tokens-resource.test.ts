@@ -85,7 +85,7 @@ describe('TokensResource', () => {
         await tokens.list();
       } catch (error) {
         expect(error).toBeInstanceOf(HydricNotFoundError);
-        expect((error as any).name).toBe('HydricNotFoundError');
+        expect((error as HydricNotFoundError).name).toBe('HydricNotFoundError');
       }
     });
 
