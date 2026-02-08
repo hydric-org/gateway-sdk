@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- aae57ba: update readme
+
 ## 1.0.1
 
 ### Patch Changes
