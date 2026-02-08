@@ -91,18 +91,13 @@ export class HydricGateway {
    */
   constructor(options: hydricGatewayApiOptions) {
     if (!options.apiKey) {
-      throw new HydricInvalidParamsError(
-        `HydricGateway: API key is required. Get one at ${DASHBOARD_URL}`,
-      );
+      throw new HydricInvalidParamsError(`HydricGateway: API key is required. Get one at ${DASHBOARD_URL}`);
     }
 
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl || this.getBaseUrl();
     this.multichainTokens = new MultiChainTokensResource(this.baseUrl, this.getHeaders.bind(this));
-    this.singleChainTokens = new SingleChainTokensResource(
-      this.baseUrl,
-      this.getHeaders.bind(this),
-    );
+    this.singleChainTokens = new SingleChainTokensResource(this.baseUrl, this.getHeaders.bind(this));
     this.tokenBaskets = new TokenBasketsResource(this.baseUrl, this.getHeaders.bind(this));
   }
 
@@ -140,5 +135,7 @@ export * from './errors/hydric-unauthorized.error.js';
 export * from './resources/multi-chain-tokens-resource.js';
 export * from './resources/single-chain-tokens-resource.js';
 export * from './resources/token-baskets-resource.js';
+
+export * from './types.js';
 
 export type { components, operations, paths };

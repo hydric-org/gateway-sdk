@@ -9,7 +9,7 @@ const constants = JSON.parse(fs.readFileSync(constantsPath, 'utf8'));
 const baseApiUrl = constants.BASE_API_URL;
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/types.ts'],
+  entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
   dts: true,
   splitting: false,

@@ -1,17 +1,7 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 1.0.0
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### Major Changes
 
-## [0.0.1] - 2026-02-07
-
-### Added
-
-- Initial monorepo setup with pnpm workspaces.
-- TypeScript SDK scaffolding (@hydric/gateway).
-- Automatic type generation from OpenAPI spec.
-- tsup build system for ESM/CJS compatibility.
-- Vitest testing framework setup.
-- Coding style linting (ESLint + Prettier).
+- Initial release
