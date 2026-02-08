@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "sdks/typescript/**"
-      - ".changeset/**"
+      - ".changeset/*.md"
       - "package.json"
       - "pnpm-workspace.yaml"
       - ".github/workflows/pull-request.yml"
