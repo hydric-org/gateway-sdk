@@ -1,4 +1,4 @@
-name: Gatekeeper CI
+name: Pull Request CI
 
 on:
   pull_request:
@@ -9,6 +9,7 @@ on:
       - ".changeset/**"
       - "package.json"
       - "pnpm-workspace.yaml"
+      - ".github/workflows/pull-request.yml"
 
 jobs:
   verify:
@@ -33,6 +34,9 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install
+
+      - name: Sync API Types
+        run: pnpm run sync
 
       - name: Lint
         run: pnpm --filter @hydric/gateway run lint
