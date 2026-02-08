@@ -11,7 +11,7 @@
         "test": "pnpm --filter \"@hydric/*\" test",
         "lint": "pnpm --filter \"@hydric/*\" lint",
         "typecheck": "pnpm --filter \"@hydric/*\" typecheck",
-        "update-spec": "curl -s https://api.hydric.org/v1/openapi.json -o specs/openapi.json",
+        "update-spec": "mkdir -p specs && curl -s https://api.hydric.org/v1/openapi.json -o specs/openapi.json",
         "generate-types": "pnpm --filter \"@hydric/*\" generate-types",
         "sync": "pnpm run update-spec && pnpm run generate-types"
     },
