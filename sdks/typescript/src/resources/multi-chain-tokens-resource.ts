@@ -1,13 +1,5 @@
-import { components } from '../generated/api-types.js';
+import { GetMultiChainTokenListParams, GetMultiChainTokenListResult, SearchMultichainTokensParams, SearchMultichainTokensResult } from '../types.js';
 import { fetchHydricApi } from '../utils/fetch-hydric-api.js';
-
-export type GetMultiChainTokenListParams =
-  components['schemas']['GetMultiChainTokenListRequestParams'];
-export type GetMultiChainTokenListResult = components['schemas']['GetMultiChainTokenListResponse'];
-
-export type SearchMultichainTokensParams =
-  components['schemas']['SearchMultichainTokensRequestParams'];
-export type SearchMultichainTokensResult = components['schemas']['SearchMultichainTokensResponse'];
 
 /**
  * Resource class for interacting with multi-chain token endpoints.
@@ -45,9 +37,7 @@ export class MultiChainTokensResource {
    * });
    * ```
    */
-  public async list(
-    params: GetMultiChainTokenListParams = {},
-  ): Promise<GetMultiChainTokenListResult> {
+  public async list(params: GetMultiChainTokenListParams = {}): Promise<GetMultiChainTokenListResult> {
     return fetchHydricApi<GetMultiChainTokenListResult>(`${this.baseUrl}/v1/tokens`, {
       method: 'POST',
       headers: this.getHeaders(),

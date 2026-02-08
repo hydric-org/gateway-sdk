@@ -1,21 +1,5 @@
-import { components } from '../generated/api-types.js';
+import { GetSingleChainTokenListParams, GetSingleChainTokenListResult, SearchSingleChainTokensParams, SearchSingleChainTokensResult, SupportedChainId } from '../types.js';
 import { fetchHydricApi } from '../utils/fetch-hydric-api.js';
-
-export type SearchSingleChainTokenChainId =
-  components['schemas']['SearchSingleChainTokenPathParams']['chainId'];
-
-export type GetSingleChainTokenListChainId =
-  components['schemas']['GetSingleChainTokenListPathParams']['chainId'];
-
-export type GetSingleChainTokenListParams =
-  components['schemas']['GetSingleChainTokenListRequestBody'];
-export type GetSingleChainTokenListResult =
-  components['schemas']['GetSingleChainTokenListResponse'];
-
-export type SearchSingleChainTokensParams =
-  components['schemas']['SearchSingleChainTokensRequestBody'];
-export type SearchSingleChainTokensResult =
-  components['schemas']['SearchSingleChainTokensResponse'];
 
 /**
  * Resource class for interacting with single-chain token endpoints.
@@ -53,10 +37,7 @@ export class SingleChainTokensResource {
    * });
    * ```
    */
-  public async list(
-    chainId: GetSingleChainTokenListChainId,
-    params: GetSingleChainTokenListParams = {},
-  ): Promise<GetSingleChainTokenListResult> {
+  public async list(chainId: SupportedChainId, params: GetSingleChainTokenListParams = {}): Promise<GetSingleChainTokenListResult> {
     return fetchHydricApi<GetSingleChainTokenListResult>(`${this.baseUrl}/v1/tokens/${chainId}`, {
       method: 'POST',
       headers: this.getHeaders(),
@@ -85,17 +66,11 @@ export class SingleChainTokensResource {
    *
    * ```
    */
-  public async search(
-    chainId: SearchSingleChainTokenChainId,
-    params: SearchSingleChainTokensParams,
-  ): Promise<SearchSingleChainTokensResult> {
-    return fetchHydricApi<SearchSingleChainTokensResult>(
-      `${this.baseUrl}/v1/tokens/${chainId}/search`,
-      {
-        method: 'POST',
-        headers: this.getHeaders(),
-        body: JSON.stringify(params),
-      },
-    );
+  public async search(chainId: SupportedChainId, params: SearchSingleChainTokensParams): Promise<SearchSingleChainTokensResult> {
+    return fetchHydricApi<SearchSingleChainTokensResult>(`${this.baseUrl}/v1/tokens/${chainId}/search`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(params),
+    });
   }
 }

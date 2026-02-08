@@ -1,25 +1,6 @@
-import { components } from '../generated/api-types.js';
+import { GetMultichainBasketParams, GetSingleChainBasketParams, GetSingleTokenBasketResult, GetTokenBasketListResult, GetTokenBasketsListParams } from '../types.js';
 import { buildQueryString } from '../utils/build-query-string.js';
 import { fetchHydricApi } from '../utils/fetch-hydric-api.js';
-
-export type GetTokenBasketListResult = components['schemas']['GetTokenBasketListResponse'];
-export type GetTokenBasketResult = components['schemas']['GetTokenBasketResponse'];
-
-export type TokenBasketId = components['schemas']['TokenBasket']['id'];
-export type SupportedChainId = components['schemas']['BlockchainAddress']['chainId'];
-export type SupportedChainIds = SupportedChainId[] | undefined;
-
-export type GetTokenBasketsListQueryParams =
-  components['schemas']['GetTokenBasketsListQueryParams'];
-
-export type GetMultipleChainsTokenBasketParams =
-  components['schemas']['GetMultipleChainsTokenBasketsQueryParams'];
-
-export type getSingleMultichainBasketParams =
-  components['schemas']['GetSingleMultiChainBasketPathParams'] &
-    components['schemas']['GetMultipleChainsTokenBasketsQueryParams'];
-
-export type GetSingleChainBasketParams = components['schemas']['GetSingleChainBasketPathParams'];
 
 /**
  * Resource class for interacting with token basket endpoints.
@@ -54,9 +35,7 @@ export class TokenBasketsResource {
    *
    * ```
    */
-  public async list(
-    params: GetTokenBasketsListQueryParams = {},
-  ): Promise<GetTokenBasketListResult> {
+  public async list(params: GetTokenBasketsListParams = {}): Promise<GetTokenBasketListResult> {
     const queryString = buildQueryString(params);
     const url = `${this.baseUrl}/v1/tokens/baskets${queryString}`;
 
@@ -88,13 +67,11 @@ export class TokenBasketsResource {
    *
    * ```
    */
-  public async getMultiChainById(
-    params: getSingleMultichainBasketParams,
-  ): Promise<GetTokenBasketResult> {
+  public async getMultiChainById(params: GetMultichainBasketParams): Promise<GetSingleTokenBasketResult> {
     const queryString = buildQueryString({ chainIds: params.chainIds });
     const url = `${this.baseUrl}/v1/tokens/baskets/${params.basketId}${queryString}`;
 
-    return fetchHydricApi<GetTokenBasketResult>(url, {
+    return fetchHydricApi<GetSingleTokenBasketResult>(url, {
       method: 'GET',
       headers: this.getHeaders(),
     });
@@ -120,12 +97,10 @@ export class TokenBasketsResource {
    *
    * ```
    */
-  public async getSingleChainById(
-    params: GetSingleChainBasketParams,
-  ): Promise<GetTokenBasketResult> {
+  public async getSingleChainById(params: GetSingleChainBasketParams): Promise<GetSingleTokenBasketResult> {
     const url = `${this.baseUrl}/v1/tokens/baskets/${params.chainId}/${params.basketId}`;
 
-    return fetchHydricApi<GetTokenBasketResult>(url, {
+    return fetchHydricApi<GetSingleTokenBasketResult>(url, {
       method: 'GET',
       headers: this.getHeaders(),
     });
