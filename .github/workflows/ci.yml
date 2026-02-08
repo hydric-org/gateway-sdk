@@ -1,0 +1,47 @@
+name: Gatekeeper CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sdks/typescript/**"
+      - ".changeset/**"
+      - "package.json"
+      - "pnpm-workspace.yaml"
+
+jobs:
+  verify:
+    name: Verify SDK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm --filter @hydric/gateway run lint
+
+      - name: Build
+        run: pnpm --filter @hydric/gateway run build
+
+      - name: Test
+        run: pnpm --filter @hydric/gateway run test
+
+      - name: Enforce Changesets
+        run: npx @changesets/cli status --since=origin/main
