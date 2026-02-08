@@ -2,7 +2,7 @@
     "name": "@hydric/gateway",
     "version": "1.0.0",
     "description": "The official JavaScript & TypeScript SDK for the hydric Gateway.",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
