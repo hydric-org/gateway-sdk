@@ -6,9 +6,9 @@ export type GetMultiChainTokenListParams =
 export type GetMultiChainTokenListResult = components['schemas']['GetMultiChainTokenListResponse'];
 
 /**
- * Resource class for interacting with token-related endpoints.
+ * Resource class for interacting with multi-chain token endpoints.
  */
-export class TokensResource {
+export class MultiChainTokensResource {
   constructor(
     /** @internal */
     private readonly baseUrl: string,
@@ -27,7 +27,7 @@ export class TokensResource {
    *
    * @example
    * ```typescript
-   * const { tokens, nextCursor } = await hydric.tokens.multichainList({
+   * const { tokens, nextCursor } = await hydric.multichainTokens.list({
    *   config: {
    *     limit: 10,
    *     orderBy: { field: 'tvl', direction: 'desc' }
@@ -38,7 +38,7 @@ export class TokensResource {
    * });
    * ```
    */
-  public async multichainList(
+  public async list(
     params: GetMultiChainTokenListParams = {},
   ): Promise<GetMultiChainTokenListResult> {
     return fetchHydricApi<GetMultiChainTokenListResult>(`${this.baseUrl}/v1/tokens`, {

@@ -1,6 +1,6 @@
 import { HydricInvalidParamsError } from './errors/hydric-invalid-params.error.js';
 import type { components, operations, paths } from './generated/api-types.js';
-import { TokensResource } from './resources/tokens-resource.js';
+import { MultiChainTokensResource } from './resources/multi-chain-tokens-resource.js';
 
 const BASE_API_URL = process.env.BASE_API_URL!;
 const DASHBOARD_URL = process.env.DASHBOARD_URL!;
@@ -42,11 +42,11 @@ export class HydricGateway {
   private readonly baseUrl: string;
 
   /**
-   * Access the Tokens resource.
-   * Use this to fetch token lists, token information, etc.
-   * @see {@link TokensResource}
+   * Access the MultiChainTokens resource.
+   * Use this to fetch token lists, search tokens, etc.
+   * @see {@link MultiChainTokensResource}
    */
-  public readonly tokens: TokensResource;
+  public readonly multichainTokens: MultiChainTokensResource;
 
   /**
    * Creates a new instance of the hydric Gateway SDK client.
@@ -71,7 +71,7 @@ export class HydricGateway {
 
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl || this.getBaseUrl();
-    this.tokens = new TokensResource(this.baseUrl, this.getHeaders.bind(this));
+    this.multichainTokens = new MultiChainTokensResource(this.baseUrl, this.getHeaders.bind(this));
   }
 
   /**
@@ -105,6 +105,6 @@ export * from './errors/hydric-rate-limit.error.js';
 export * from './errors/hydric-invalid-params.error.js';
 export * from './errors/hydric-unauthorized.error.js';
 
-export * from './resources/tokens-resource.js';
+export * from './resources/multi-chain-tokens-resource.js';
 export type { components, operations, paths };
 

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HydricInvalidParamsError, HydricNotFoundError, HydricRateLimitError } from '../index.js';
-import { TokensResource } from './tokens-resource.js';
+import { MultiChainTokensResource } from './multi-chain-tokens-resource.js';
 
 describe('TokensResource', () => {
   const baseUrl = 'https://api.hydric.org';
@@ -9,10 +9,10 @@ describe('TokensResource', () => {
     'Content-Type': 'application/json',
   };
   const getHeaders = vi.fn().mockReturnValue(mockHeaders);
-  let tokens: TokensResource;
+  let tokens: MultiChainTokensResource;
 
   beforeEach(() => {
-    tokens = new TokensResource(baseUrl, getHeaders);
+    tokens = new MultiChainTokensResource(baseUrl, getHeaders);
     vi.stubGlobal('fetch', vi.fn());
     getHeaders.mockClear();
   });
@@ -33,7 +33,7 @@ describe('TokensResource', () => {
         json: async () => mockEnvelope,
       } as Response);
 
-      const result = await tokens.multichainList({ config: { limit: 10 } });
+      const result = await tokens.list({ config: { limit: 10 } });
 
       expect(result).toEqual(mockData);
       expect(getHeaders).toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe('TokensResource', () => {
         json: async () => ({ data: { tokens: [] } }),
       } as Response);
 
-      await tokens.multichainList();
+      await tokens.list();
 
       expect(fetch).toHaveBeenCalledWith(
         expect.any(String),
@@ -82,7 +82,7 @@ describe('TokensResource', () => {
       } as Response);
 
       try {
-        await tokens.multichainList();
+        await tokens.list();
       } catch (error) {
         expect(error).toBeInstanceOf(HydricNotFoundError);
         expect((error as any).name).toBe('HydricNotFoundError');
@@ -109,7 +109,7 @@ describe('TokensResource', () => {
       } as Response);
 
       try {
-        await tokens.multichainList();
+        await tokens.list();
         expect.fail('Should have thrown HydricRateLimitError');
       } catch (error) {
         expect(error).toBeInstanceOf(HydricRateLimitError);
@@ -138,7 +138,7 @@ describe('TokensResource', () => {
       } as Response);
 
       try {
-        await tokens.multichainList();
+        await tokens.list();
       } catch (error) {
         const rateLimitErr = error as HydricRateLimitError;
         expect(rateLimitErr.retryAfter).toBeUndefined();
@@ -165,7 +165,7 @@ describe('TokensResource', () => {
       } as Response);
 
       try {
-        await tokens.multichainList();
+        await tokens.list();
       } catch (error) {
         expect(error).toBeInstanceOf(HydricInvalidParamsError);
         const apiErr = error as HydricInvalidParamsError;

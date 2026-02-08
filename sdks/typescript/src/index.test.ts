@@ -23,7 +23,7 @@ describe('HydricGateway', () => {
     it('should initialize with a custom baseUrl', () => {
       const customUrl = 'https://custom.api.com';
       const hydric = new HydricGateway({ apiKey, baseUrl: customUrl });
-      expect(hydric.tokens).toBeDefined();
+      expect(hydric.multichainTokens).toBeDefined();
     });
 
     it('should throw HydricValidationError if API key is missing', () => {
@@ -37,8 +37,8 @@ describe('HydricGateway', () => {
 
     it('should initialize the tokens resource', () => {
       const hydric = new HydricGateway({ apiKey });
-      expect(hydric.tokens).toBeDefined();
-      expect(typeof hydric.tokens.multichainList).toBe('function');
+      expect(hydric.multichainTokens).toBeDefined();
+      expect(typeof hydric.multichainTokens.list).toBe('function');
     });
 
     it('should include the dashboard URL in the validation error message', () => {

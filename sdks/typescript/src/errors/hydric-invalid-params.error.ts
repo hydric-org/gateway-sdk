@@ -3,6 +3,7 @@
  */
 export class HydricInvalidParamsError extends Error {
   public override readonly name = 'HydricInvalidParamsError';
+
   constructor(message: string) {
     super(message);
 
