@@ -140,5 +140,5 @@ export * from './errors/hydric-unauthorized.error.js';
 export * from './resources/multi-chain-tokens-resource.js';
 export * from './resources/single-chain-tokens-resource.js';
 export * from './resources/token-baskets-resource.js';
-export type { components, operations, paths };
 
+export type { components, operations, paths };
