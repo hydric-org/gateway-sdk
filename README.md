@@ -107,6 +107,9 @@ Whenever a change is pushed to the `main` branch that modifies the `/docs` folde
 
 This ensures that the latest features and technical details are live on [docs.hydric.org](https://docs.hydric.org) as soon as the code is merged.
 
+> [!NOTE]
+> New pages must be manually registered in the central repository's `docs.json` navigation configuration.
+
 ---
 
 ## 🔄 Changeset Workflow
