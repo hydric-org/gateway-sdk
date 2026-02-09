@@ -1,9 +1,10 @@
 import { components } from '../generated/api-types.js';
+import { HydricError } from './hydric-error.js';
 
 /**
  * Error thrown when the rate limit of your API key is exceeded.
  */
-export class HydricRateLimitError extends Error {
+export class HydricRateLimitError extends HydricError {
   public override readonly name = 'HydricRateLimitError';
 
   /**
