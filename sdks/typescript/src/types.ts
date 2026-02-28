@@ -20,6 +20,8 @@ export type SearchMultichainTokensResult = components['schemas']['SearchMulticha
 
 // Pools
 export type LiquidityPool = components['schemas']['LiquidityPool'];
+export type SearchPoolsParams = components['schemas']['SearchLiquidityPoolsRequestParams'];
+export type SearchPoolsResult = components['schemas']['SearchLiquidityPoolsResponse'];
 
 // Protocols
 export type Protocol = components['schemas']['Protocol'];

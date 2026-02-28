@@ -1,0 +1,83 @@
+---
+title: 'Liquidity Pools'
+description: 'Search and discover DeFi liquidity pools across multiple chains and protocols.'
+---
+
+The `liquidityPools` resource provides a unified interface to search, discover, and filter DeFi liquidity pools across major DEX protocols (like Uniswap V3, Uniswap V4, Algebra, etc.). It abstracts away protocol-specific nuances, giving you a standardized `LiquidityPool` model for every pair.
+
+Access this resource via `hydric.liquidityPools`.
+
+## Searching Pools
+
+The primary method for interacting with liquidity pools is `search`. This allows you to combine various filters—including tokens, baskets, protocols, TVL thresholds, and pool types—into a single query.
+
+### Basic Token Pair Search
+
+You can search for pools containing specific tokens by providing `tokensA` and optionally `tokensB`. The engine finds pools that contain at least one token from `A` (and if provided, also one from `B`).
+
+```typescript
+// Find USDC/ETH pools on Ethereum
+const { pools, nextCursor } = await hydric.liquidityPools.search({
+  tokensA: [
+    { chainId: 1, address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' }, // USDC
+  ],
+  tokensB: [
+    { chainId: 1, address: '0x0000000000000000000000000000000000000000' }, // ETH
+  ],
+  config: {
+    limit: 10,
+    orderBy: { field: 'tvl', direction: 'desc', timeframe: '24h' },
+  },
+  filters: {
+    minimumTotalValueLockedUsd: 100000, // Only highly liquid pools
+  },
+});
+
+for (const pool of pools) {
+  console.log(`Found pool: ${pool.address} on ${pool.protocol.name}`);
+}
+```
+
+## Using Token Baskets for Search
+
+Instead of hardcoding hundreds of token addresses, hydric allows you to search using **Token Baskets** (e.g., `usd-stablecoins`, `eth-pegged-tokens`). The API instantly resolves these baskets into their underlying assets server-side, making it trivial to find, for instance, "any stablecoin against ETH".
+
+```typescript
+// Find pools trading ANY USD Stablecoin against ETH on Base
+const { pools } = await hydric.liquidityPools.search({
+  basketsA: [{ basketId: 'usd-stablecoins', chainIds: [8453] }],
+  tokensB: [
+    { chainId: 8453, address: '0x0000000000000000000000000000000000000000' }, // ETH
+  ],
+});
+```
+
+<Note>**Performance Note:** Resolving token baskets happens entirely on the server. You don't need to fetch the basket first and pass 50+ addresses to the search API.</Note>
+
+## Filtering and Configuration
+
+The `search` method supports deep filtering to ensure your dApp only interacts with compatible infrastructure:
+
+### Filters
+
+- **`minTotalValueLockedUsd`**: Restricts results to pools with sufficient liquidity, filtering out spam or abandoned pairs.
+- **`protocols` & `blockedProtocols`**: Specify exactly which DEXes you want to support (e.g., `['uniswap-v3', 'pancakeswap-v3']`). Use `blockedProtocols` as a blacklist if you prefer an open-by-default approach. We always recommend using `protocols` to be explicit about the protocols you want to support, and avoid breaking your app when new protocols are added to the hydric gateway.
+- **`poolTypes` & `blockedPoolTypes`**: Limit results by core architecture type (e.g., `['V4']`, `['ALGEBRA']`). Useful if your integration logic only supports specific pool math. We always recommend using `poolTypes` to be explicit about the pool types you want to support, and avoid breaking your app when new pool types are added to the hydric gateway.
+
+### Config Options
+
+- **`limit`**: How many items to return per page (default `10`).
+- **`orderBy`**: Order by `tvl` or `yield` ascending/descending. Timeframes (e.g., `"24h"`, `"7d"`) dictate the interval used when ordering by yield.
+- **`cursor`**: Pass the `nextCursor` from a previous response to fetch the next page.
+
+## Data Model
+
+The response (`SearchPoolsResult`) contains the matched `pools`, the exact `filters` applied, and the `nextCursor`.
+
+Each `LiquidityPool` object provides:
+
+- `address`, `chainId`, `poolType`, and `createdAtTimestamp`.
+- `balance`: Real-time TVL in USD and exact token reserves.
+- `stats`: Extensively computed historical data (`stats24h`, `stats7d`, etc.) including trading volume, generated fees, net inflows, and yield.
+- `protocol`: Branding and identifiers for the parent DEX.
+- `metadata`: Protocol-specific parameters (like `tickSpacing` for V3, or hook capabilities for V4).
