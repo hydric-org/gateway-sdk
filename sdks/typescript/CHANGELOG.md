@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- 83c94b8: Add support to searching liquidity pools
+
 ## 1.0.2
 
 ### Patch Changes
