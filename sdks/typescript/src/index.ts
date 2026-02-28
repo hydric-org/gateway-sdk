@@ -1,5 +1,6 @@
 import { HydricInvalidParamsError } from './errors/hydric-invalid-params.error.js';
 import type { components, operations, paths } from './generated/api-types.js';
+import { LiquidityPoolsResource } from './resources/liquidity-pools-resource.js';
 import { MultiChainTokensResource } from './resources/multi-chain-tokens-resource.js';
 import { SingleChainTokensResource } from './resources/single-chain-tokens-resource.js';
 import { TokenBasketsResource } from './resources/token-baskets-resource.js';
@@ -76,6 +77,14 @@ export class HydricGateway {
   public readonly tokenBaskets: TokenBasketsResource;
 
   /**
+   * Access the Liquidity Pools resource.
+   * Use this to search and discover DeFi liquidity pools across multiple chains and protocols.
+   *
+   * @see {@link LiquidityPoolsResource}
+   */
+  public readonly liquidityPools: LiquidityPoolsResource;
+
+  /**
    * Creates a new instance of the hydric Gateway SDK client.
    * This initialization is synchronous and does not perform any network requests.
    * Validation of the API key occurs locally during instantiation and on the server
@@ -99,6 +108,7 @@ export class HydricGateway {
     this.multichainTokens = new MultiChainTokensResource(this.baseUrl, this.getHeaders.bind(this));
     this.singleChainTokens = new SingleChainTokensResource(this.baseUrl, this.getHeaders.bind(this));
     this.tokenBaskets = new TokenBasketsResource(this.baseUrl, this.getHeaders.bind(this));
+    this.liquidityPools = new LiquidityPoolsResource(this.baseUrl, this.getHeaders.bind(this));
   }
 
   /**
@@ -132,6 +142,7 @@ export * from './errors/hydric-rate-limit.error.js';
 export * from './errors/hydric-invalid-params.error.js';
 export * from './errors/hydric-unauthorized.error.js';
 
+export * from './resources/liquidity-pools-resource.js';
 export * from './resources/multi-chain-tokens-resource.js';
 export * from './resources/single-chain-tokens-resource.js';
 export * from './resources/token-baskets-resource.js';
